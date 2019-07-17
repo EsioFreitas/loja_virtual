@@ -32,7 +32,7 @@ class CategoryScreen extends StatelessWidget {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                else
+                else {
                   return TabBarView(
                     children: [
                       GridView.builder(
@@ -45,23 +45,24 @@ class CategoryScreen extends StatelessWidget {
                                   childAspectRatio: 0.65),
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
-                            return ProductTile(
-                                'grig',
-                                ProductData.fromDocument(
-                                    snapshot.data.documents[index]));
+                            ProductData data = ProductData.fromDocument(
+                                snapshot.data.documents[index]);
+                            data.category = this.snapshot.documentID;
+                            return ProductTile("grid", data);
                           }),
                       ListView.builder(
                           padding: EdgeInsets.all(4),
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
-                            return ProductTile(
-                                'list',
-                                ProductData.fromDocument(
-                                    snapshot.data.documents[index]));
+                            ProductData data = ProductData.fromDocument(
+                                snapshot.data.documents[index]);
+                            data.category = this.snapshot.documentID;
+                            return ProductTile("grid", data);
                           })
                     ],
                     physics: NeverScrollableScrollPhysics(),
                   );
+                }
               })),
     );
   }
