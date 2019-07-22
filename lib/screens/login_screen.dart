@@ -3,12 +3,21 @@ import 'package:loja_virtual/models/user_model.dart';
 import 'package:loja_virtual/screens/signup_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  final _passControler = TextEditingController();
+  final _emaipControler = TextEditingController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Entrar'),
         centerTitle: true,
@@ -28,7 +37,7 @@ class Login extends StatelessWidget {
       ),
       body: ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
-          if(model.isLoading)
+          if (model.isLoading)
             return Center(child: CircularProgressIndicator());
 
           return Form(
@@ -37,6 +46,7 @@ class Login extends StatelessWidget {
               padding: EdgeInsets.all(16),
               children: <Widget>[
                 TextFormField(
+                  controller: _emaipControler,
                   decoration: InputDecoration(hintText: "E-mail"),
                   keyboardType: TextInputType.emailAddress,
                   validator: (text) {
@@ -47,6 +57,7 @@ class Login extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 TextFormField(
+                  controller: _passControler,
                   decoration: InputDecoration(
                     hintText: "Senha",
                   ),
@@ -58,7 +69,24 @@ class Login extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if(_emaipControler.text.isEmpty)
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text('Insira seu email para recuperação'),
+                            backgroundColor: Colors.redAccent,
+                            duration: Duration(seconds: 2),
+                          ));
+                        else{
+                          model.recoverPass(_emaipControler.text);
+                          if(_emaipControler.text.isEmpty)
+                            _scaffoldKey.currentState.showSnackBar(SnackBar(
+                              content: Text('Confira seu email'),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              duration: Duration(seconds: 2),
+                            ));
+                        }
+
+                      },
                       child: Text(
                         'Esqueci minha senha',
                         style: TextStyle(color: Theme.of(context).primaryColor),
@@ -72,10 +100,12 @@ class Login extends StatelessWidget {
                     textColor: Colors.white,
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
-                      if (_formKey.currentState.validate()) {
-
-                      }
-                      model.signIn();
+                      if (_formKey.currentState.validate()) {}
+                      model.signIn(
+                          email: _emaipControler.text,
+                          pass: _passControler.text,
+                          onSuccess: _onSuccess,
+                          onFail: _onFail);
                     },
                   ),
                 )
@@ -85,5 +115,17 @@ class Login extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _onSuccess() {
+    Navigator.of(context).pop();
+  }
+
+  void _onFail() {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Falha ao Entrar'),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
   }
 }
