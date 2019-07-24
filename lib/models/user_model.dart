@@ -11,6 +11,8 @@ class UserModel extends Model {
   FirebaseUser firebaseUser;
   Map<String, dynamic> userData = Map();
 
+  static UserModel of(BuildContext context) =>
+      ScopedModel.of<UserModel>(context);
 
   @override
   void addListener(VoidCallback listener) {
@@ -18,16 +20,15 @@ class UserModel extends Model {
     _loadCurrentUseer();
   }
 
-  void singUp(
-      {@required Map<String, dynamic> userData,
-      @required String pass,
-      @required VoidCallback onSuccess,
-      @required VoidCallback onFail}) {
+  void singUp({@required Map<String, dynamic> userData,
+    @required String pass,
+    @required VoidCallback onSuccess,
+    @required VoidCallback onFail}) {
     isLoading = true;
     notifyListeners();
     _auth
         .createUserWithEmailAndPassword(
-            email: userData['email'], password: pass)
+        email: userData['email'], password: pass)
         .then((user) async {
       firebaseUser = user;
       onSuccess();
@@ -41,14 +42,14 @@ class UserModel extends Model {
     });
   }
 
-  void signIn(
-      {@required String email,
-      @required String pass,
-      @required VoidCallback onSuccess,
-      @required VoidCallback onFail}) async {
+  void signIn({@required String email,
+    @required String pass,
+    @required VoidCallback onSuccess,
+    @required VoidCallback onFail}) async {
     isLoading = true;
     notifyListeners();
-    _auth.signInWithEmailAndPassword(email: email, password: pass).then((user) async {
+    _auth.signInWithEmailAndPassword(email: email, password: pass).then((
+        user) async {
       firebaseUser = user;
       await _loadCurrentUseer();
       onSuccess();

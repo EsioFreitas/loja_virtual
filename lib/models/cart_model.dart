@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:loja_virtual/datas/cart_product.dart';
 import 'package:loja_virtual/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -6,6 +7,9 @@ import 'package:scoped_model/scoped_model.dart';
 class CartModel extends Model {
   List<CartProduct> products = [];
   UserModel user;
+
+  static CartModel of(BuildContext context) =>
+      ScopedModel.of<CartModel>(context);
 
   CartModel(this.user);
 
@@ -17,7 +21,7 @@ class CartModel extends Model {
         .collection('cart')
         .add(product.toMap())
         .then((doc) {
-      product.cId = doc.documentID;
+       product.cId = doc.documentID;
     });
 
     notifyListeners();
