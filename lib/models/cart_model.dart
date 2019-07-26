@@ -9,6 +9,9 @@ class CartModel extends Model {
   UserModel user;
   bool isLoading = false;
 
+  String cupomCode;
+  int discountPercenter = 0;
+
   static CartModel of(BuildContext context) =>
       ScopedModel.of<CartModel>(context);
 
@@ -65,6 +68,11 @@ class CartModel extends Model {
         .updateData(product.toMap());
 
     notifyListeners();
+  }
+
+  void setCoupom(String c, int i){
+      this.cupomCode = c;
+      this.discountPercenter = i;
   }
 
   void _loadData() async {
