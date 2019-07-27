@@ -24,17 +24,17 @@ class CardPrice extends StatelessWidget {
               SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[Text('Subtotal'), Text('R\$ 0.0')],
+                children: <Widget>[Text('Subtotal'), Text('R\$ ${model.getProductsPrice().toStringAsFixed(2)}')],
               ),
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[Text('Desconto'), Text('R\$ 0.0')],
+                children: <Widget>[Text('Desconto'), Text('R\$ ${model.getProductsDiscount().toStringAsFixed(2)}')],
               ),
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[Text('Entrega'), Text('R\$ 0.0')],
+                children: <Widget>[Text('Entrega'), Text('R\$ ${model.getShipPrice().toStringAsFixed(2)}')],
               ),
               Divider(),
               SizedBox(height: 12),
@@ -46,7 +46,7 @@ class CardPrice extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   Text(
-                    'R\$ 0.0',
+                    'R\$ ${(model.getShipPrice()+model.getProductsPrice()-model.getProductsDiscount()).toStringAsFixed(2)}',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).primaryColor,

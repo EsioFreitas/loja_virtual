@@ -70,9 +70,9 @@ class CartModel extends Model {
     notifyListeners();
   }
 
-  void setCoupom(String c, int i){
-      this.cupomCode = c;
-      this.discountPercenter = i;
+  void setCoupom(String c, int i) {
+    this.cupomCode = c;
+    this.discountPercenter = i;
   }
 
   void _loadData() async {
@@ -84,6 +84,26 @@ class CartModel extends Model {
 
     products =
         query.documents.map((doc) => CartProduct.fromDocument(doc)).toList();
+    notifyListeners();
+  }
+
+  double getProductsPrice() {
+    double price = 0.0;
+    for (CartProduct c in products)
+      if (c.productData != null) price += (c.quantity * c.productData.price);
+
+    return price;
+  }
+
+  double getProductsDiscount() {
+    return getProductsPrice() * discountPercenter / 100;
+  }
+
+  double getShipPrice() {
+    return 9.99;
+  }
+
+  void updatePrices(){
     notifyListeners();
   }
 }
