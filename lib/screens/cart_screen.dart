@@ -8,6 +8,7 @@ import 'package:loja_virtual/widget/ship_card.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'login_screen.dart';
+import 'order_screen.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -81,8 +82,11 @@ class CartScreen extends StatelessWidget {
               ShipCard(),
               CardPrice(() async {
                 String order = await model.finishedOrder();
-                if(order != null )
-
+                if(order != null ){
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (c)=>Order(order))
+                  );
+                }
               }),
             ],
           );
