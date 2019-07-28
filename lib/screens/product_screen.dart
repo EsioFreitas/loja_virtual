@@ -127,6 +127,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         productCart.quantity = 1;
                         productCart.pId = product.id;
                         productCart.category = product.category;
+                        productCart.productData = product;
 
                         CartModel.of(context).addCartItem(productCart);
                       } else {
